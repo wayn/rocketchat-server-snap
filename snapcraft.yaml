@@ -6,9 +6,9 @@
 # 4.  `snapcraft stage`
 # 5.  `snapcraft snap`
 
-name: rocketchat-server
-version: 0.52.0
-summary: Rocket.Chat server
+name: fudao-server
+version: 0.0.1
+summary: fudao.io server
 description: Have your own Slack like online chat, built with Meteor. https://rocket.chat/
 
 grade: devel
@@ -64,7 +64,7 @@ parts:
     rocketchat-server:
         after: [mongodb]
         plugin: dump
-        source: https://rocket.chat/releases/latest/download
+        source: https://github.com/wayn/Rocket.Chat/archive/0.54.2.zip
         source-type: tar
         stage-packages:
             - graphicsmagick
@@ -123,4 +123,3 @@ parts:
         source-commit: 53e117802fedd5915eeb32907873d8786a4b2936
         snap:
             - bin/caddy
-
