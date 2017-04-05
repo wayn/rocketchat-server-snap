@@ -64,8 +64,8 @@ parts:
     rocketchat-server:
         after: [mongodb]
         plugin: dump
-        source: https://github.com/wayn/Rocket.Chat/archive/0.54.2.zip
-        source-type: zip
+        source: http://lushibo.com/Rocket.Chat.tar.gz
+        source-type: tar
         stage-packages:
             - graphicsmagick
             - libtcmalloc-minimal4
