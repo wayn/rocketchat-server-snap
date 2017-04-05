@@ -65,7 +65,7 @@ parts:
         after: [mongodb]
         plugin: dump
         source: https://github.com/wayn/Rocket.Chat/archive/0.54.2.zip
-        source-type: tar
+        source-type: zip
         stage-packages:
             - graphicsmagick
             - libtcmalloc-minimal4
