@@ -116,8 +116,6 @@ parts:
             - bin
 
     caddy:
-        build-packages:
-            - golang-1.7
         plugin: go
         go-importpath: github.com/mholt/caddy
         source: https://github.com/mholt/caddy
@@ -125,3 +123,6 @@ parts:
         source-commit: 53e117802fedd5915eeb32907873d8786a4b2936
         snap:
             - bin/caddy
+        after: [go]
+    go:
+        source-tag: go1.8.1
