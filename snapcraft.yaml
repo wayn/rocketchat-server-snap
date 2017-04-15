@@ -101,3 +101,5 @@ parts:
         source-commit: 53e117802fedd5915eeb32907873d8786a4b2936
         snap:
             - bin/caddy
+    go:
+        source-tag: go1.7.5
