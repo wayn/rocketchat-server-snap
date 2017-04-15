@@ -15,87 +15,109 @@ grade: devel
 confinement: strict
 
 apps:
-    rocketchat-server:
-        command: startRocketChat
-        daemon: simple
-        plugs: [network, network-bind]
-    rocketchat-mongo:
-        command: startmongo
-        daemon: simple
-        plugs: [network, network-bind]
+    backupdb:
+        command: env LC_ALL=C backupdb.sh
+        plugs: [network]
+    initcaddy:
+        command: env LC_ALL=C initcaddy.sh
+    restoredb:
+        command: env LC_ALL=C restoredb.sh
+        plugs: [network]
     rocketchat-caddy:
         command: env LC_ALL=C caddy -conf=$SNAP_DATA/Caddyfile -host=localhost:8080
         daemon: simple
         plugs: [network, network-bind]
-    backupdb:
-        command: env LC_ALL=c rcbackup
-        plugs: [network]
-    initcaddy:
-        command: env LC_ALL=c initcaddy
+    rocketchat-mongo:
+        command: env LC_ALL=C startmongo.sh
+        daemon: simple
+        plugs: [network, network-bind]
+    rocketchat-server:
+        command: env LC_ALL=C startrc.sh
+        daemon: simple
+        plugs: [network, network-bind]
+
 parts:
     node:
         plugin: nodejs
-        node-engine: 4.8.1
+        node-engine: 4.7.1
         node-packages:
-            - promise
+            - bcrypt
             - fibers
-            - underscore
-            - source-map-support
+            - meteor-promise
+            - minimax
+            - promise
             - semver
+            - source-map-support
+            - underscore
         build-packages:
-            # For fibers
-            - python
             - build-essential
-            - nodejs
+            - python
         organize:
             lib/node_modules: node_modules
+        stage:
+            - bin
+            - node_modules
+        snap:
+            - bin
+            - node_modules
+
     rocketchat-server:
-        plugin: dump
         after: [mongodb]
+        plugin: dump
         source: http://lushibo.com/Rocket.Chat.tar.gz
         source-type: tar
         stage-packages:
             - graphicsmagick
+            - libtcmalloc-minimal4
         stage:
-            - programs
-            - main.js
             - .node_version.txt
-            - usr
             - lib
+            - main.js
+            - programs
+            - usr
         snap:
-            - programs
-            - main.js
             - .node_version.txt
-            - usr
             - lib
+            - main.js
+            - programs
+            - usr
+
     mongodb:
-        source: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-3.2.7.tgz
+        build-packages:
+            - wget
+        prepare: ./bin/preparemongo.sh
         plugin: dump
+        source: ./
         stage-packages:
             - libssl1.0.0
         stage:
-            - usr
             - bin
             - lib
+            - usr
         snap:
-            - usr
             - bin
             - lib
+            - usr
+
     scripts:
         plugin: dump
-        source: resources/
+        source: bin/
         organize:
-            rcbackup: bin/rcbackup
-            startmongo: bin/startmongo
-            startRocketChat: bin/startRocketChat
-            initreplset.js: bin/initreplset.js
             Caddyfile: bin/Caddyfile
-            initcaddy: bin/initcaddy
+            backupdb.sh: bin/backupdb.sh
+            initcaddy.sh: bin/initcaddy.sh
+            initmongo.sh: bin/initmongo.sh
+            initmongoreplset.js: bin/initmongoreplset.js
+            preparemongo.sh: bin/preparemongo.sh
+            restoredb.sh: bin/restoredb.sh
+            startmongo.sh: bin/startmongo.sh
+            startrc.sh: bin/startrc.sh
         snap:
             - bin
+
     caddy:
         plugin: go
-        go-importpath:  github.com/mholt/caddy
+        go-importpath: github.com/mholt/caddy
         source: https://github.com/mholt/caddy
         source-type: git
         source-commit: 53e117802fedd5915eeb32907873d8786a4b2936
