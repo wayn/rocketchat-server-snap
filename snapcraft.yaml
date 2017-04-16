@@ -46,7 +46,7 @@ parts:
             - nodejs
         organize:
             lib/node_modules: node_modules
-        after: [go]
+        after: [rocketchat-server]
     rocketchat-server:
         plugin: dump
         after: [mongodb]
