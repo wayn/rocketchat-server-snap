@@ -78,6 +78,7 @@ parts:
             - usr
             - bin
             - lib
+        after: [caddy]
     scripts:
         plugin: dump
         source: resources/
