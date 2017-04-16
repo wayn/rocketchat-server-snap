@@ -46,6 +46,12 @@ parts:
             - nodejs
         organize:
             lib/node_modules: node_modules
+        stage:
+            - LICENSE
+            - README.md
+        snap:
+            - LICENSE
+            - README.md
     rocketchat-server:
         plugin: dump
         after: [mongodb]
@@ -101,3 +107,9 @@ parts:
         after: [go]
     go:
         source-tag: go1.8.1
+        stage:
+            - LICENSE
+            - README.md
+        snap:
+            - LICENSE
+            - README.md
